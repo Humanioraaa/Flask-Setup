@@ -1,0 +1,33 @@
+names:
+- Fresh-Apple
+- Fresh-Banana
+- Fresh-Orange
+- Fresh-Papaya
+- Fresh-Pineapple
+- Fresh-Strawberry
+- Raw-Apple
+- Raw-Banana
+- Raw-Orange
+- Raw-Papaya
+- Raw-Pineapple
+- Raw-Strawberry
+- Rotten-Apple
+- Rotten-Banana
+- Rotten-Orange
+- Rotten-Papaya
+- Rotten-Pineapple
+- Rotten-Strawberry
+- fresh-salak
+- raw-salak
+- rotten-salak
+- unripe
+nc: 22
+roboflow:
+  license: CC BY 4.0
+  project: frutyripe-xadrn
+  url: https://universe.roboflow.com/smgt-ya/frutyripe-xadrn/dataset/4
+  version: 4
+  workspace: smgt-ya
+test: ../test/images
+train: Frutyripe-4/train/images
+val: Frutyripe-4/valid/images
