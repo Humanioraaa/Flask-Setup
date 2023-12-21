@@ -7,12 +7,12 @@ from flask import send_from_directory
 
 
 
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = '/Frutiripe/YOLOv5_EfficientNetLite_Web/YOLOv5_EfficientNetLite_Web/Upload'  # specify your upload directory
+app = Flask(__name__, static_folder='/Frutiripe/YOLOv5_EfficientNetLite_Web/YOLOv5_EfficientNetLite_Web/runs/detect')
+app.config['UPLOAD_FOLDER'] = '/Frutiripe/YOLOv5_EfficientNetLite_Web/Flask_ML/Upload'  # specify your upload directory
 
 # Load drug information
-cfg_model_path = "D:/Frutiripe/YOLOv5_EfficientNetLite_Web/YOLOv5_EfficientNetLite_Web/runs/train/exp/weights/best.pt"
-data_yaml_path = "D:/Frutiripe/YOLOv5_EfficientNetLite_Web/YOLOv5_EfficientNetLite_Web/Frutyripe-4/data.yaml"
+cfg_model_path = "D:/Frutiripe/YOLOv5_EfficientNetLite_Web/Flask_ML/runs/train/exp/weights/best.pt"
+data_yaml_path = "D:/Frutiripe/YOLOv5_EfficientNetLite_Web/Flask_ML/Frutyripe-4/data.yaml"
 
 # Load class names from YAML
 def load_class_names(yaml_path):
@@ -33,11 +33,11 @@ def get_latest_directory(base_path):
 def run_detection(image_path):
     if image_path is None:
         raise ValueError("image_path is None")
-    output_base_dir = '/Frutiripe/YOLOv5_EfficientNetLite_Web/YOLOv5_EfficientNetLite_Web/runs/detect'
+    output_base_dir = '/Frutiripe/YOLOv5_EfficientNetLite_Web/Flask_ML/runs/detect'
     # Ensure the output directory exists
     os.makedirs(output_base_dir, exist_ok=True)
     subprocess.run([
-        'python', '/Frutiripe/YOLOv5_EfficientNetLite_Web/YOLOv5_EfficientNetLite_Web/detect.py',
+        'python', '/Frutiripe/YOLOv5_EfficientNetLite_Web/Flask_ML/detect.py',
         '--weights', cfg_model_path,
         '--data', data_yaml_path,
         '--img', '512',
@@ -70,7 +70,8 @@ def upload_file():
             imgpath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             detected_image_dir = run_detection(imgpath)
             detected_images = read_detected_images(detected_image_dir)
-            return render_template('index.html', detected_images=detected_images)
+            detected_image_paths = [os.path.relpath(img, start=app.static_folder) for img in detected_images]
+            return render_template('index.html', detected_images=detected_image_paths)
     return render_template('index.html')
 
 if __name__ == '__main__':
